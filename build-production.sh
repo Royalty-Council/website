@@ -1,23 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Local build script - Run this on your development machine
-# This builds the static site and commits it to the production/ folder
+# Simple build script - Builds and commits to main branch
+# Run this on your development machine
 
-echo "=== Building Next.js static site locally ==="
+echo "=== Building Next.js static site ==="
 pnpm install
 pnpm run build
 
-echo "=== Copying to production folder ==="
-rm -rf production && mkdir production
-cp -R out/* production/
-
-echo "=== Committing production folder ==="
+echo "=== Committing production folder to main branch ==="
 git add -A production
-git commit -m "chore: publish static build to production/" || echo "No changes to commit"
+git commit -m "chore: build production $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
 
 echo "=== Pushing to GitHub ==="
-git push
+git push -u origin main
 
-echo "✅ Build complete! production/ folder pushed to GitHub"
+echo "✅ Build complete! Production folder pushed to main branch"
 echo "Next step: SSH into Bluehost and run ~/deploy.sh"
